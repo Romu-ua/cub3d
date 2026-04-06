@@ -1,7 +1,8 @@
 NAME		= cub3D
 CC 			= cc
 CFLAGS		= -Wall -Wextra -Werror -g
-MLX_DIR		= /workspace/hyamamot/minilibx-linux
+MLX_DIR		= ./minilibx-linux
+MLX_LIB		= libmlx.a
 INCLUDES	= -I$(MLX_DIR) -Iinclude
 LIBS		= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
@@ -35,25 +36,38 @@ SRCS_RAY	= src/raycasting/get_move_input.c \
 			src/raycasting/render_util.c \
 			src/raycasting/render.c
 
-SRCS_VALID	= src/valid/valid.c \
-			src/valid/dfs.c
+SRCS_VALID	= src/valid/dfs.c \
+			src/valid/map_deep_copy.c \
+			src/valid/valid.c
 
-SRCS		= $(SRCS_UTILS) $(SRCS_INIT) $(SRCS_RAY) $(SRCS_VALID) src/main.c
+SRCS_PRECHECK	= src/precheck/precheck_color.c \
+			src/precheck/precheck_init_finish.c \
+			src/precheck/precheck_texture.c \
+			src/precheck/precheck_utils.c \
+			src/precheck/precheck.c
+
+SRCS		= $(SRCS_UTILS) $(SRCS_INIT) $(SRCS_RAY) $(SRCS_VALID) $(SRCS_PRECHECK) src/main.c
 OBJS		= $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(MLX_DIR)/$(MLX_LIB)
 	$(CC) $(OBJS) $(LIBS) -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
+$(MLX_DIR)/$(MLX_LIB):
+	$(MAKE) -C $(MLX_DIR)
+
 clean:
-	rm -f $(OBJS)
+	rm -rf $(OBJS)
+	$(MAKE) -C $(MLX_DIR) clean
+
 
 fclean: clean
 	rm -f $(NAME)
+	$(MAKE) -C $(MLX_DIR) clean
 
 re: fclean all
 

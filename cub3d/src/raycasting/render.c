@@ -32,7 +32,7 @@ static int	get_tex_x(t_vars *vars, t_ray *ray, int direction)
 	tex_x = (int)(ray->wall_x * vars->tex[direction].w);
 	if (ray->side == 0 && ray->ray_dir_x < 0)
 		tex_x = (int)((1 - ray->wall_x) * vars->tex[direction].w);
-	if (ray->side == 1 && ray->ray_dir_y < 0)
+	if (ray->side == 1 && ray->ray_dir_y > 0)
 		tex_x = (int)((1 - ray->wall_x) * vars->tex[direction].w);
 	return (tex_x);
 }
@@ -73,7 +73,7 @@ void	render_ceiling_and_floor(t_vars *vars, int x, int line_height)
 		draw_start = 0;
 	draw_end = line_height / 2 + HEIGHT / 2;
 	if (draw_end >= HEIGHT)
-		draw_end = HEIGHT - 1;
+		draw_end = HEIGHT;
 	y = 0;
 	while (y < draw_start)
 	{
