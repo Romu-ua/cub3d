@@ -82,6 +82,8 @@ static void	ray_calc_wall(t_vars *vars, t_ray *ray)
 		ray->ray_l = ray->side_dist_x - ray->delta_dist_x;
 	else
 		ray->ray_l = ray->side_dist_y - ray->delta_dist_y;
+	if (ray->ray_l < 0.00001)
+		ray->ray_l = 0.00001;
 	ray->line_height = (int)(HEIGHT / ray->ray_l);
 	ray->draw_start = -ray->line_height / 2 + HEIGHT / 2;
 	if (ray->draw_start < 0)
