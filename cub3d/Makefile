@@ -32,6 +32,7 @@ SRCS_INIT	= src/init/init.c \
 SRCS_RAY	= src/raycasting/get_move_input.c \
 			src/raycasting/key_event.c \
 			src/raycasting/raycasting.c \
+			src/raycasting/raycasting_util.c \
 			src/raycasting/render_fram.c \
 			src/raycasting/render_util.c \
 			src/raycasting/render.c

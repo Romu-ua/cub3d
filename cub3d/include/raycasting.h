@@ -101,5 +101,7 @@ int				render_fram(t_vars *vars);
 void			ray_init(t_vars *vars, t_ray *ray, int x);
 void			ray_dda(t_vars *vars, t_ray *ray);
 void			raycasting(t_map *map);
+void			set_ns_vec(t_map *map, t_vars *vars);
+void			set_ew_vec(t_map *map, t_vars *vars);
 
 #endif

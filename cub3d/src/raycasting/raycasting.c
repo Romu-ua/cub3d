@@ -17,25 +17,9 @@ void	player_dir(t_map *map, t_vars *vars)
 	vars->pos_y = map->pos[0] + 0.5;
 	vars->pos_x = map->pos[1] + 0.5;
 	if (map->dir == 'N' || map->dir == 'S')
-	{
-		if (map->dir == 'N')
-			vars->dir_y = -1;
-		else
-			vars->dir_y = 1;
-		vars->dir_x = 0;
-		vars->plane_x = 0.66;
-		vars->plane_y = 0.0;
-	}
+		set_ns_vec(map, vars);
 	else
-	{
-		if (map->dir == 'W')
-			vars->dir_x = -1;
-		else
-			vars->dir_x = 1;
-		vars->dir_y = 0;
-		vars->plane_x = 0.0;
-		vars->plane_y = 0.66;
-	}
+		set_ew_vec(map, vars);
 }
 
 void	sub_init_vars(t_map *map, t_vars *vars)
@@ -55,6 +39,28 @@ void	sub_init_vars(t_map *map, t_vars *vars)
 	vars->time_ms = get_time_ms();
 }
 
+void	clean_exit_raycasting(t_vars *vars, int tex_count)
+{
+	int	i;
+
+	i = 0;
+	while (i < tex_count)
+	{
+		if (vars->tex[i].img)
+			mlx_destroy_image(vars->mlx, vars->tex[i].img);
+		i++;
+	}
+	if (vars->img.img)
+		mlx_destroy_image(vars->mlx, vars->img.img);
+	if (vars->win)
+		mlx_destroy_window(vars->mlx, vars->win);
+	if (vars->mlx)
+	{
+		mlx_destroy_display(vars->mlx);
+		free(vars->mlx);
+	}
+}
+
 int	init_vars(t_map *map, t_vars *vars)
 {
 	int	i;
@@ -65,12 +71,18 @@ int	init_vars(t_map *map, t_vars *vars)
 		vars->tex[i].img = mlx_xpm_file_to_image(
 				vars->mlx, map->textures[i], &vars->tex[i].w, &vars->tex[i].h);
 		if (!vars->tex[i].img)
+		{
+			clean_exit_raycasting(vars, i);
 			return (1);
+		}
 		vars->tex[i].addr = mlx_get_data_addr(
 				vars->tex[i].img, &vars->tex[i].bits_per_pixel,
 				&vars->tex[i].line_length, &vars->tex[i].endian);
 		if (!vars->tex[i].addr)
+		{
+			clean_exit_raycasting(vars, i + 1);
 			return (1);
+		}
 		i++;
 	}
 	player_dir(map, vars);

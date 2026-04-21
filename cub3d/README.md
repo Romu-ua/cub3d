@@ -1,4 +1,4 @@
-_This project has been created as part of the 42 curriculum by hyamamot, oo_
+_This project has been created as part of the 42 curriculum by hyamamot, tvaroux_
 
 [English](README.md) | [Japanese](README.ja.md)
 
